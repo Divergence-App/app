@@ -41,7 +41,8 @@ const SubjectPage = ({
     endsAt: '10:00',
     date: '',
     repeats: false,
-    description: ''
+    description: '',
+    notes: []
   });
   
   // Time picker states
