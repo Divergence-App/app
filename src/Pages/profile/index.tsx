@@ -20,25 +20,35 @@ const UserPage = () => {
             />
 
             <View className="pt-2">
-              <Text style={
+              <Text
+                style={
                   Context.isDyslexiaMode
                     ? fonts.dyslexicRegular
                     : fonts.interRegular
-                } className="text-white text-2xl">Robbie Morgan</Text>
+                }
+                className="text-white text-2xl">
+                Robbie Morgan
+              </Text>
             </View>
 
             <View className="pb-2">
-              <Text style={
+              <Text
+                style={
                   Context.isDyslexiaMode
                     ? fonts.dyslexicRegular
                     : fonts.interRegular
-                } className="text-white text-xl">Joined 09/11/2024</Text>
+                }
+                className="text-white text-xl">
+                Joined 09/11/2024
+              </Text>
             </View>
 
-            <TouchableOpacity onPress={() => {
-              setDyslexiaMode(!Context.isDyslexiaMode);
-              Context.setIsDyslexiaMode(!Context.isDyslexiaMode);
-            }} className="w-1/2 items-center">
+            <TouchableOpacity
+              onPress={() => {
+                setDyslexiaMode(!Context.isDyslexiaMode);
+                Context.setIsDyslexiaMode(!Context.isDyslexiaMode);
+              }}
+              className="w-1/2 items-center">
               <Text
                 className={`text-white text-lg `}
                 style={
@@ -50,7 +60,6 @@ const UserPage = () => {
               </Text>
             </TouchableOpacity>
           </View>
-
         </ScrollView>
       </View>
     </SafeAreaView>
