@@ -32,7 +32,7 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -47,5 +47,46 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIAppFonts</key>
+	<array>
+		<string>InterBlack.ttf</string>
+		<string>InterBlackItalic.ttf</string>
+		<string>InterBold.ttf</string>
+		<string>InterBoldItalic.ttf</string>
+		<string>InterExtraBold.ttf</string>
+		<string>InterExtraBoldItalic.ttf</string>
+		<string>InterExtraLight.ttf</string>
+		<string>InterExtraLightItalic.ttf</string>
+		<string>InterItalic.ttf</string>
+		<string>InterLight.ttf</string>
+		<string>InterLightItalic.ttf</string>
+		<string>InterMedium.ttf</string>
+		<string>InterMediumItalic.ttf</string>
+		<string>InterRegular.ttf</string>
+		<string>InterSemiBold.ttf</string>
+		<string>InterSemiBoldItalic.ttf</string>
+		<string>InterThin.ttf</string>
+		<string>InterThinItalic.ttf</string>
+		<string>RalewayBlack.ttf</string>
+		<string>RalewayBlackItalic.ttf</string>
+		<string>RalewayBold.ttf</string>
+		<string>RalewayBoldItalic.ttf</string>
+		<string>RalewayExtraBold.ttf</string>
+		<string>RalewayExtraBoldItalic.ttf</string>
+		<string>RalewayExtraLight.ttf</string>
+		<string>RalewayExtraLightItalic.ttf</string>
+		<string>RalewayItalic.ttf</string>
+		<string>RalewayLight.ttf</string>
+		<string>RalewayLightItalic.ttf</string>
+		<string>RalewayMedium.ttf</string>
+		<string>RalewayMediumItalic.ttf</string>
+		<string>RalewayRegular.ttf</string>
+		<string>RalewaySemiBold.ttf</string>
+		<string>RalewaySemiBoldItalic.ttf</string>
+		<string>RalewayThin.ttf</string>
+		<string>RalewayThinItalic.ttf</string>
+		<string>OpenDyslexic3-Bold.ttf</string>
+		<string>OpenDyslexic3-Regular.ttf</string>
+	</array>
 </dict>
 </plist>
