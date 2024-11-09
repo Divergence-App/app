@@ -55,7 +55,7 @@ const fonts = StyleSheet.create({
   dyslexicRegular: {
     fontFamily: 'OpenDyslexic3',
     letterSpacing: -2,
-}
+  },
 });
 
 export default fonts;

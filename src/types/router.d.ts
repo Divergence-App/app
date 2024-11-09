@@ -4,5 +4,6 @@ export type RootStackParamList = {
   Profile: undefined;
   Subject: undefined;
 
-  SubjectNotes: { subject?: SubjectType };
+  SubjectNotes: {subject?: SubjectType};
+  RevisionFlipper: undefined;
 };

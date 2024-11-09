@@ -24,6 +24,7 @@ import TimeTablePage from '../Pages/timeTable';
 import UserPage from '../Pages/profile';
 import SubjectPage from '../Pages/subject';
 import SubjectNotes from '../Pages/subjectnotes';
+import RevisionFlipper from '../Pages/revisionflipper';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -36,6 +37,13 @@ function HomeStack() {
         animation: Platform.OS === 'android' ? 'slide_from_bottom' : 'default',
       }}>
       <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen
+        name="SubjectNotes"
+        component={SubjectNotes}
+        initialParams={{
+          subject: {},
+        }}
+      />
     </Stack.Navigator>
   );
 }
@@ -49,13 +57,16 @@ function TimeTableStack() {
       }}>
       <Stack.Screen name="TimeTable" component={TimeTablePage} />
       <Stack.Screen name="Subject" component={SubjectPage} />
-      <Stack.Screen name="SubjectNotes" component={SubjectNotes} initialParams={{
-        subject: {}
-      }} />
+      <Stack.Screen
+        name="SubjectNotes"
+        component={SubjectNotes}
+        initialParams={{
+          subject: {},
+        }}
+      />
     </Stack.Navigator>
   );
 }
-
 
 function ProfileStack() {
   return (
@@ -68,6 +79,19 @@ function ProfileStack() {
     </Stack.Navigator>
   );
 }
+
+function RevisionStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        header: ({route, options, navigation}) => <></>,
+        animation: Platform.OS === 'android' ? 'slide_from_bottom' : 'default',
+      }}>
+      <Stack.Screen name="RevisionFlipper" component={RevisionFlipper} />
+    </Stack.Navigator>
+  );
+}
+
 function AppRouter() {
   const {width, height} = useWindowDimensions();
   return (
@@ -114,8 +138,8 @@ function AppRouter() {
             }}
           />
           <Tab.Screen
-            name="Library"
-            component={HomeStack}
+            name="RevisionFlipper"
+            component={RevisionStack}
             options={{
               tabBarIcon: ({color, focused, size}) => (
                 <BookText color={color} size={size} />

@@ -1,13 +1,13 @@
-import { Text, View, TouchableOpacity, Animated } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { ScrollView } from 'react-native-gesture-handler';
-import { Calendar, DateData } from 'react-native-calendars';
-import { useState, useEffect, useRef, useContext } from 'react';
-import { AppContext } from '../../components/appContext';
+import {Text, View, TouchableOpacity, Animated} from 'react-native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {ScrollView} from 'react-native-gesture-handler';
+import {Calendar, DateData} from 'react-native-calendars';
+import {useState, useEffect, useRef, useContext} from 'react';
+import {AppContext} from '../../components/appContext';
 import fonts from '../../lib/fonts';
-import { NavigationProp } from '@react-navigation/native';
-import { RootStackParamList } from '../../types/router';
-import { SubjectType } from '../../types/components';
+import {NavigationProp} from '@react-navigation/native';
+import {RootStackParamList} from '../../types/router';
+import {SubjectType} from '../../types/components';
 
 interface WeekDates {
   start: Date;
@@ -23,14 +23,14 @@ interface MarkedDates {
 }
 
 const TimeTablePage = ({
-  navigation
+  navigation,
 }: {
   navigation: NavigationProp<RootStackParamList>;
 }) => {
   const Context = useContext(AppContext);
   const [selectedWeek, setSelectedWeek] = useState<WeekDates>({
     start: new Date(),
-    end: new Date()
+    end: new Date(),
   });
   const [daysInWeek, setDaysInWeek] = useState<Date[]>([]);
   const [isCalendarExpanded, setIsCalendarExpanded] = useState<boolean>(false);
@@ -48,7 +48,7 @@ const TimeTablePage = ({
     const first = curr.getDate() - curr.getDay();
     const start = new Date(curr.setDate(first));
     const end = new Date(curr.setDate(first + 6));
-    return { start, end };
+    return {start, end};
   };
 
   const formatDate = (date: Date): string => {
@@ -58,7 +58,7 @@ const TimeTablePage = ({
   const generateWeekDays = (startDate: Date): Date[] => {
     const days: Date[] = [];
     const currentDate = new Date(startDate);
-    
+
     for (let i = 0; i < 7; i++) {
       days.push(new Date(currentDate));
       currentDate.setDate(currentDate.getDate() + 1);
@@ -68,17 +68,21 @@ const TimeTablePage = ({
 
   const getSubjectsForDay = (date: Date): SubjectType[] => {
     const dateStr = formatToDD_MM_YYYY(date);
-    return Context.subjects.filter(subject => {
-      // Check if the subject is on this date
-      if (subject.date === dateStr) return true;
-      
-      // Check if subject repeats and matches the day of week
-      if (subject.repeats) {
-        const subjectDate = new Date(subject.date.split('/').reverse().join('-'));
-        return subjectDate.getDay() === date.getDay();
-      }
-      return false;
-    }).sort((a, b) => a.startsAt.localeCompare(b.startsAt));
+    return Context.subjects
+      .filter(subject => {
+        // Check if the subject is on this date
+        if (subject.date === dateStr) return true;
+
+        // Check if subject repeats and matches the day of week
+        if (subject.repeats) {
+          const subjectDate = new Date(
+            subject.date.split('/').reverse().join('-'),
+          );
+          return subjectDate.getDay() === date.getDay();
+        }
+        return false;
+      })
+      .sort((a, b) => a.startsAt.localeCompare(b.startsAt));
   };
 
   const onDayPress = (day: DateData): void => {
@@ -99,8 +103,8 @@ const TimeTablePage = ({
 
   const getMarkedDates = (): MarkedDates => {
     return {
-      [formatDate(selectedWeek.start)]: { startingDay: true, color: '#50cebb' },
-      [formatDate(selectedWeek.end)]: { endingDay: true, color: '#50cebb' }
+      [formatDate(selectedWeek.start)]: {startingDay: true, color: '#50cebb'},
+      [formatDate(selectedWeek.end)]: {endingDay: true, color: '#50cebb'},
     };
   };
 
@@ -116,7 +120,7 @@ const TimeTablePage = ({
   });
 
   const formatDayString = (day: Date): string => {
-    const weekday = day.toLocaleDateString('en-US', { weekday: 'long' });
+    const weekday = day.toLocaleDateString('en-US', {weekday: 'long'});
     const formattedDate = formatToDD_MM_YYYY(day);
     return `${weekday}, ${formattedDate}`;
   };
@@ -134,36 +138,39 @@ const TimeTablePage = ({
     return `${formatTime(startsAt)} - ${formatTime(endsAt)}`;
   };
 
-  const SubjectCard = ({ subject }: { subject: SubjectType }) => (
-    <TouchableOpacity onPress={() => {
-      navigation.navigate("SubjectNotes", { subject });
-    }}>
-      <View 
+  const SubjectCard = ({subject}: {subject: SubjectType}) => (
+    <TouchableOpacity
+      onPress={() => {
+        navigation.navigate('SubjectNotes', {subject});
+      }}>
+      <View
         className="mt-2 p-3 rounded-lg"
-        style={{ backgroundColor: subject.colour + '40' }} 
-      >
+        style={{backgroundColor: subject.colour + '40'}}>
         <View className="flex-row justify-between items-center">
-          <Text 
+          <Text
             className="text-white text-base font-medium"
-            style={Context.isDyslexiaMode ? fonts.dyslexicRegular : fonts.interMedium}
-          >
+            style={
+              Context.isDyslexiaMode ? fonts.dyslexicRegular : fonts.interMedium
+            }>
             {formatTimeRange(subject.startsAt, subject.endsAt)} - {subject.name}
           </Text>
-          {subject.repeats && (
-            <Text className="text-white text-sm">↻</Text>
-          )}
+          {subject.repeats && <Text className="text-white text-sm">↻</Text>}
         </View>
-        <Text 
+        <Text
           className="text-white text-sm mt-1"
-          style={Context.isDyslexiaMode ? fonts.dyslexicRegular : fonts.interRegular}
-        >
+          style={
+            Context.isDyslexiaMode ? fonts.dyslexicRegular : fonts.interRegular
+          }>
           {subject.teacher}
         </Text>
         {subject.description && (
-          <Text 
+          <Text
             className="text-white text-sm mt-1"
-            style={Context.isDyslexiaMode ? fonts.dyslexicRegular : fonts.interRegular}
-          >
+            style={
+              Context.isDyslexiaMode
+                ? fonts.dyslexicRegular
+                : fonts.interRegular
+            }>
             {subject.description}
           </Text>
         )}
@@ -173,11 +180,14 @@ const TimeTablePage = ({
 
   return (
     <SafeAreaView className="bg-[#101010] h-full w-full">
-      <TouchableOpacity 
+      <TouchableOpacity
         onPress={toggleCalendar}
-        className="px-4 py-3 border-b border-gray-800 flex-row justify-between items-center"
-      >
-        <Text className="text-white text-lg" style={Context.isDyslexiaMode ? fonts.dyslexicRegular : fonts.interRegular}>
+        className="px-4 py-3 border-b border-gray-800 flex-row justify-between items-center">
+        <Text
+          className="text-white text-lg"
+          style={
+            Context.isDyslexiaMode ? fonts.dyslexicRegular : fonts.interRegular
+          }>
           {`${formatToDD_MM_YYYY(selectedWeek.start)} - ${formatToDD_MM_YYYY(selectedWeek.end)}`}
         </Text>
         <Text className="text-white text-lg">
@@ -185,12 +195,14 @@ const TimeTablePage = ({
         </Text>
       </TouchableOpacity>
 
-      <Animated.View style={{ height: calendarHeight, overflow: 'hidden' }}>
+      <Animated.View style={{height: calendarHeight, overflow: 'hidden'}}>
         <Calendar
           onDayPress={onDayPress}
           markedDates={getMarkedDates()}
           markingType={'period'}
-          style={Context.isDyslexiaMode ? fonts.dyslexicRegular : fonts.interRegular}
+          style={
+            Context.isDyslexiaMode ? fonts.dyslexicRegular : fonts.interRegular
+          }
           theme={{
             calendarBackground: '#101010',
             textColor: 'white',
@@ -207,26 +219,29 @@ const TimeTablePage = ({
         {daysInWeek.map((day: Date, index: number) => {
           const daySubjects = getSubjectsForDay(day);
           return (
-            <View
-              key={index}
-              className="px-4 py-3 border-b border-green-300"
-            >
-              <Text 
-                style={Context.isDyslexiaMode ? fonts.dyslexicRegular : fonts.interRegular} 
-                className="text-white text-lg"
-              >
+            <View key={index} className="px-4 py-3 border-b border-green-300">
+              <Text
+                style={
+                  Context.isDyslexiaMode
+                    ? fonts.dyslexicRegular
+                    : fonts.interRegular
+                }
+                className="text-white text-lg">
                 {formatDayString(day)}
               </Text>
-              
+
               {daySubjects.length > 0 ? (
                 daySubjects.map((subject, idx) => (
                   <SubjectCard key={idx} subject={subject} />
                 ))
               ) : (
-                <Text 
+                <Text
                   className="text-gray-400 mt-2 italic"
-                  style={Context.isDyslexiaMode ? fonts.dyslexicRegular : fonts.interRegular}
-                >
+                  style={
+                    Context.isDyslexiaMode
+                      ? fonts.dyslexicRegular
+                      : fonts.interRegular
+                  }>
                   No subjects scheduled
                 </Text>
               )}
@@ -234,19 +249,25 @@ const TimeTablePage = ({
           );
         })}
 
-        <View className='h-4' />
-        <View className='w-full h-32 justify-center items-center'>
-          <TouchableOpacity onPress={() => {
-            navigation.navigate("Subject");
-          }}> 
-            <Text 
+        <View className="h-4" />
+        <View className="w-full h-32 justify-center items-center">
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Subject');
+            }}>
+            <Text
               className="text-black text-lg rounded-lg bg-green-300 p-4"
-              style={Context.isDyslexiaMode ? fonts.dyslexicRegular : fonts.interRegular}
-            >
+              style={
+                Context.isDyslexiaMode
+                  ? fonts.dyslexicRegular
+                  : fonts.interRegular
+              }>
               Add new subject
             </Text>
           </TouchableOpacity>
         </View>
+
+        <View className="h-16" />
       </ScrollView>
     </SafeAreaView>
   );

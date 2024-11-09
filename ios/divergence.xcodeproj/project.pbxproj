@@ -53,6 +53,7 @@
 		E12EADFC36534844AFB7D5C1 /* RalewayMediumItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 348C68EDAFFE4BB5AF102969 /* RalewayMediumItalic.ttf */; };
 		F88FCC7BDF764F7E98B83A71 /* RalewayItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DF0C29DF13114B76BFC14067 /* RalewayItalic.ttf */; };
 		FD41A1A0F56C419C8DD57C1E /* RalewayThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E00A784DEC4B4CAB886D3A4A /* RalewayThinItalic.ttf */; };
+		C4694C69BF404D328926D6F2 /* divergence_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 27362DEE274D4B469E64F855 /* divergence_logo.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -122,6 +123,7 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F858CA41E0B74216A569D861 /* InterBlackItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = InterBlackItalic.ttf; path = ../src/assets/fonts/InterBlackItalic.ttf; sourceTree = "<group>"; };
 		FB57372C96AC464EA8952767 /* OpenDyslexic3-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenDyslexic3-Bold.ttf"; path = "../src/assets/fonts/OpenDyslexic3-Bold.ttf"; sourceTree = "<group>"; };
+		27362DEE274D4B469E64F855 /* divergence_logo.png */ = {isa = PBXFileReference; name = "divergence_logo.png"; path = "../src/assets/images/divergence_logo.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -226,6 +228,7 @@
 				E00A784DEC4B4CAB886D3A4A /* RalewayThinItalic.ttf */,
 				FB57372C96AC464EA8952767 /* OpenDyslexic3-Bold.ttf */,
 				0500A6DEEDD44A53909E556E /* OpenDyslexic3-Regular.ttf */,
+				27362DEE274D4B469E64F855 /* divergence_logo.png */,
 			);
 			name = Resources;
 			path = "";
@@ -408,6 +411,7 @@
 				FD41A1A0F56C419C8DD57C1E /* RalewayThinItalic.ttf in Resources */,
 				A1C4ECE81F354064B967077F /* OpenDyslexic3-Bold.ttf in Resources */,
 				85EB4C4F7D95431BB55219E2 /* OpenDyslexic3-Regular.ttf in Resources */,
+				C4694C69BF404D328926D6F2 /* divergence_logo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

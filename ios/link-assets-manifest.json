@@ -152,6 +152,10 @@
     {
       "path": "src/assets/fonts/RalewayThinItalic.ttf",
       "sha1": "e3f08e6c59b8038cdacfc8f45d93e495d1567b8a"
+    },
+    {
+      "path": "src/assets/images/divergence_logo.png",
+      "sha1": "30c059c1b49084c18743a5afbdd17270b3e6441e"
     }
   ]
 }

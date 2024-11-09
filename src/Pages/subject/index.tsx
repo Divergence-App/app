@@ -1,25 +1,33 @@
-import {Text, TouchableOpacity, useWindowDimensions, View, TextInput, Alert, Platform} from 'react-native';
+import {
+  Text,
+  TouchableOpacity,
+  useWindowDimensions,
+  View,
+  TextInput,
+  Alert,
+  Platform,
+} from 'react-native';
 import {SafeAreaView, useSafeAreaInsets} from 'react-native-safe-area-context';
 import fonts from '../../lib/fonts';
 import {ScrollView} from 'react-native-gesture-handler';
 import CustomHeader from '../../components/customHeader';
-import { useContext, useState, useRef } from 'react';
-import { AppContext } from '../../components/appContext';
-import { setDyslexiaMode, setSubjects } from '../../lib/storage';
-import { Animated } from 'react-native';
+import {useContext, useState, useRef} from 'react';
+import {AppContext} from '../../components/appContext';
+import {setDyslexiaMode, setSubjects} from '../../lib/storage';
+import {Animated} from 'react-native';
 import GradientBlur from '../../components/GradientBlur';
-import { Calendar, DateData } from 'react-native-calendars';
-import { Switch } from 'react-native';
-import { NavigationProp } from '@react-navigation/native';
-import { RootStackParamList } from '../../types/router';
+import {Calendar, DateData} from 'react-native-calendars';
+import {Switch} from 'react-native';
+import {NavigationProp} from '@react-navigation/native';
+import {RootStackParamList} from '../../types/router';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-import { SubjectType } from '../../types/components';
+import {SubjectType} from '../../types/components';
 
 const HEADER_SCROLL_DISTANCE = 1;
 
 const SubjectPage = ({
-  navigation
+  navigation,
 }: {
   navigation: NavigationProp<RootStackParamList>;
 }) => {
@@ -27,10 +35,10 @@ const SubjectPage = ({
   const insets = useSafeAreaInsets();
   const headerHeight = 10;
   const topSpacing = insets.top + headerHeight;
-  const { width, height } = useWindowDimensions();
+  const {width, height} = useWindowDimensions();
   const scrollY = new Animated.Value(0);
   const blurHeight = 100;
-  
+
   // Form state
   const [subject, setSubject] = useState<SubjectType>({
     id: Math.random().toString(36).substr(2, 9),
@@ -42,13 +50,13 @@ const SubjectPage = ({
     date: '',
     repeats: false,
     description: '',
-    notes: []
+    notes: [],
   });
-  
+
   // Time picker states
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
-  
+
   // Calendar state
   const [isCalendarVisible, setIsCalendarVisible] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
@@ -57,12 +65,12 @@ const SubjectPage = ({
   const blurOpacity = scrollY.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE],
     outputRange: [0, 1],
-    extrapolate: "clamp",
+    extrapolate: 'clamp',
   });
 
   const handleScroll = Animated.event(
-    [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-    { useNativeDriver: false }
+    [{nativeEvent: {contentOffset: {y: scrollY}}}],
+    {useNativeDriver: false},
   );
 
   const toggleCalendar = (): void => {
@@ -82,7 +90,7 @@ const SubjectPage = ({
   const onDayPress = (day: DateData): void => {
     const formattedDate = formatToDD_MM_YYYY(new Date(day.dateString));
     setSelectedDate(formattedDate);
-    setSubject(prev => ({ ...prev, date: formattedDate }));
+    setSubject(prev => ({...prev, date: formattedDate}));
     toggleCalendar();
   };
 
@@ -102,7 +110,7 @@ const SubjectPage = ({
       const hours = selectedDate.getHours();
       const minutes = selectedDate.getMinutes();
       const timeString = formatTime(hours, minutes);
-      setSubject(prev => ({ ...prev, startsAt: timeString }));
+      setSubject(prev => ({...prev, startsAt: timeString}));
     }
   };
 
@@ -111,7 +119,7 @@ const SubjectPage = ({
       const hours = selectedDate.getHours();
       const minutes = selectedDate.getMinutes();
       const timeString = formatTime(hours, minutes);
-      setSubject(prev => ({ ...prev, endsAt: timeString }));
+      setSubject(prev => ({...prev, endsAt: timeString}));
     }
   };
 
@@ -123,7 +131,13 @@ const SubjectPage = ({
   };
 
   const submitSubject = () => {
-    if (!subject.name || !subject.teacher || !subject.startsAt || !subject.endsAt || !subject.date) {  
+    if (
+      !subject.name ||
+      !subject.teacher ||
+      !subject.startsAt ||
+      !subject.endsAt ||
+      !subject.date
+    ) {
       Alert.alert('Please fill in all fields');
       return;
     }
@@ -139,38 +153,36 @@ const SubjectPage = ({
       return;
     }
 
-    Context.setSubjects((prev) => {
+    Context.setSubjects(prev => {
       setSubjects([...prev, subject]);
       return [...prev, subject];
     });
-    
+
     navigation.goBack();
     Alert.alert('Subject added successfully');
   };
 
   return (
-    <View className='bg-[#101010] flex-1'>
+    <View className="bg-[#101010] flex-1">
       <View
-        style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 1 }}
-        className='bg-[#101010]'
-      >
+        style={{position: 'absolute', top: 0, left: 0, right: 0, zIndex: 1}}
+        className="bg-[#101010]">
         <CustomHeader title="Add Subject" showBackButton />
-        {insets.top > 0 && Platform.OS !== "android" && (
+        {insets.top > 0 && Platform.OS !== 'android' && (
           <Animated.View
             style={{
-              position: "absolute",
+              position: 'absolute',
               top: 0,
               left: 0,
               right: 0,
               height: blurHeight,
               zIndex: 1,
               opacity: blurOpacity,
-            }}
-          >
+            }}>
             <GradientBlur
               useAtTop
               locations={[1, 0.4, 0]}
-              colors={["transparent", "rgba(0,0,0,0.8)", "#0B0B0B"]}
+              colors={['transparent', 'rgba(0,0,0,0.8)', '#0B0B0B']}
               width={width}
               height={insets.top + insets.top}
             />
@@ -181,17 +193,17 @@ const SubjectPage = ({
       <Animated.ScrollView
         onScroll={handleScroll}
         scrollEventThrottle={16}
-        contentContainerStyle={{ paddingTop: topSpacing }}
-        style={{ flex: 1 }}
-        contentInsetAdjustmentBehavior="scrollableAxes"
-      >
+        contentContainerStyle={{paddingTop: topSpacing}}
+        style={{flex: 1}}
+        contentInsetAdjustmentBehavior="scrollableAxes">
         <View className="w-full items-center justify-center px-4">
           <Text
             style={[
-              Context.isDyslexiaMode ? fonts.dyslexicRegular : fonts.interRegular
+              Context.isDyslexiaMode
+                ? fonts.dyslexicRegular
+                : fonts.interRegular,
             ]}
-            className="text-white text-center text-3xl mb-8"
-          >
+            className="text-white text-center text-3xl mb-8">
             Enter your subject 📚
           </Text>
 
@@ -201,7 +213,9 @@ const SubjectPage = ({
               <TextInput
                 className="bg-[#1C1C1E] text-white p-4 rounded-lg"
                 value={subject.name}
-                onChangeText={(text) => setSubject(prev => ({ ...prev, name: text }))}
+                onChangeText={text =>
+                  setSubject(prev => ({...prev, name: text}))
+                }
                 placeholder="Enter subject name"
                 placeholderTextColor="#666"
               />
@@ -212,7 +226,9 @@ const SubjectPage = ({
               <TextInput
                 className="bg-[#1C1C1E] text-white p-4 rounded-lg"
                 value={subject.teacher}
-                onChangeText={(text) => setSubject(prev => ({ ...prev, teacher: text }))}
+                onChangeText={text =>
+                  setSubject(prev => ({...prev, teacher: text}))
+                }
                 placeholder="Enter teacher's name"
                 placeholderTextColor="#666"
               />
@@ -221,24 +237,27 @@ const SubjectPage = ({
             {/* Time Selection */}
             <View>
               <Text className="text-white mb-2 mt-2">Time</Text>
-              
+
               <View className="bg-[#1C1C1E] rounded-lg overflow-hidden">
                 {/* Start Time */}
                 <View className="border-b border-gray-800">
-                  <TouchableOpacity 
+                  <TouchableOpacity
                     onPress={() => setShowStartPicker(!showStartPicker)}
-                    className="w-full"
-                  >
+                    className="w-full">
                     <View className="p-4 flex-row justify-between items-center">
                       <Text className="text-white">Starts at</Text>
-                      <Text className="text-white">{formatTimeForDisplay(subject.startsAt)}</Text>
+                      <Text className="text-white">
+                        {formatTimeForDisplay(subject.startsAt)}
+                      </Text>
                     </View>
-                    
+
                     {showStartPicker && Platform.OS === 'ios' && (
                       <View className="w-full bg-[#2C2C2E] px-2">
                         <DateTimePicker
                           value={(() => {
-                            const [hours, minutes] = subject.startsAt.split(':').map(Number);
+                            const [hours, minutes] = subject.startsAt
+                              .split(':')
+                              .map(Number);
                             const date = new Date();
                             date.setHours(hours, minutes, 0);
                             return date;
@@ -248,7 +267,7 @@ const SubjectPage = ({
                           onChange={onStartTimeChange}
                           display="spinner"
                           textColor="white"
-                          style={{ height: 120, width: '100%' }}
+                          style={{height: 120, width: '100%'}}
                         />
                       </View>
                     )}
@@ -257,20 +276,23 @@ const SubjectPage = ({
 
                 {/* End Time */}
                 <View>
-                  <TouchableOpacity 
+                  <TouchableOpacity
                     onPress={() => setShowEndPicker(!showEndPicker)}
-                    className="w-full"
-                  >
+                    className="w-full">
                     <View className="p-4 flex-row justify-between items-center">
                       <Text className="text-white">Ends at</Text>
-                      <Text className="text-white">{formatTimeForDisplay(subject.endsAt)}</Text>
+                      <Text className="text-white">
+                        {formatTimeForDisplay(subject.endsAt)}
+                      </Text>
                     </View>
-                    
+
                     {showEndPicker && Platform.OS === 'ios' && (
                       <View className="w-full bg-[#2C2C2E] px-2">
                         <DateTimePicker
                           value={(() => {
-                            const [hours, minutes] = subject.endsAt.split(':').map(Number);
+                            const [hours, minutes] = subject.endsAt
+                              .split(':')
+                              .map(Number);
                             const date = new Date();
                             date.setHours(hours, minutes, 0);
                             return date;
@@ -280,7 +302,7 @@ const SubjectPage = ({
                           onChange={onEndTimeChange}
                           display="spinner"
                           textColor="white"
-                          style={{ height: 120, width: '100%' }}
+                          style={{height: 120, width: '100%'}}
                         />
                       </View>
                     )}
@@ -292,7 +314,9 @@ const SubjectPage = ({
               {Platform.OS === 'android' && showStartPicker && (
                 <DateTimePicker
                   value={(() => {
-                    const [hours, minutes] = subject.startsAt.split(':').map(Number);
+                    const [hours, minutes] = subject.startsAt
+                      .split(':')
+                      .map(Number);
                     const date = new Date();
                     date.setHours(hours, minutes, 0);
                     return date;
@@ -306,7 +330,9 @@ const SubjectPage = ({
               {Platform.OS === 'android' && showEndPicker && (
                 <DateTimePicker
                   value={(() => {
-                    const [hours, minutes] = subject.endsAt.split(':').map(Number);
+                    const [hours, minutes] = subject.endsAt
+                      .split(':')
+                      .map(Number);
                     const date = new Date();
                     date.setHours(hours, minutes, 0);
                     return date;
@@ -321,19 +347,19 @@ const SubjectPage = ({
             {/* Date Picker */}
             <View>
               <Text className="text-white mb-2 mt-2">Date</Text>
-              <TouchableOpacity 
+              <TouchableOpacity
                 onPress={toggleCalendar}
-                className="bg-[#1C1C1E] p-4 rounded-lg flex-row justify-between items-center"
-              >
+                className="bg-[#1C1C1E] p-4 rounded-lg flex-row justify-between items-center">
                 <Text className="text-white">
-                  {subject.date || "Select date"}
+                  {subject.date || 'Select date'}
                 </Text>
                 <Text className="text-white">
                   {isCalendarVisible ? '▼' : '▲'}
                 </Text>
               </TouchableOpacity>
-              
-              <Animated.View style={{ height: calendarHeight, overflow: 'hidden' }}>
+
+              <Animated.View
+                style={{height: calendarHeight, overflow: 'hidden'}}>
                 <Calendar
                   onDayPress={onDayPress}
                   markingType={'period'}
@@ -354,7 +380,9 @@ const SubjectPage = ({
               <Text className="text-white">Repeats Weekly</Text>
               <Switch
                 value={subject.repeats}
-                onValueChange={(value) => setSubject(prev => ({ ...prev, repeats: value }))}
+                onValueChange={value =>
+                  setSubject(prev => ({...prev, repeats: value}))
+                }
               />
             </View>
 
@@ -363,7 +391,9 @@ const SubjectPage = ({
               <TextInput
                 className="bg-[#1C1C1E] text-white p-4 rounded-lg"
                 value={subject.description}
-                onChangeText={(text) => setSubject(prev => ({ ...prev, description: text }))}
+                onChangeText={text =>
+                  setSubject(prev => ({...prev, description: text}))
+                }
                 placeholder="Enter description"
                 placeholderTextColor="#666"
                 multiline
@@ -371,11 +401,12 @@ const SubjectPage = ({
               />
             </View>
 
-            <TouchableOpacity 
+            <TouchableOpacity
               className="bg-[#50cebb] p-4 rounded-lg mt-4"
-              onPress={submitSubject}
-            >
-              <Text className="text-white text-center font-bold">Save Subject</Text>
+              onPress={submitSubject}>
+              <Text className="text-white text-center font-bold">
+                Save Subject
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
