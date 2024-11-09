@@ -1638,6 +1638,11 @@
   resolved "https://registry.npmjs.org/@react-native-masked-view/masked-view/-/masked-view-0.3.2.tgz"
   integrity sha512-XwuQoW7/GEgWRMovOQtX3A4PrXhyaZm0lVUiY8qJDvdngjLms9Cpdck6SmGAUNqQwcj2EadHC1HwL0bEyoa/SQ==
 
+"@react-native-picker/picker@^2.9.0":
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/@react-native-picker/picker/-/picker-2.9.0.tgz#0a7053ca174ec697388cb79032fb4c1445554e07"
+  integrity sha512-khEhIW/uhfMqq/+tvg4rEAiPGT8GX+Y6QydlP2TSMSmRHoSJK+ShXvXZXSr4Sii4imkj4BwvLunGywwtQDODqg==
+
 "@react-native/assets-registry@0.76.1":
   version "0.76.1"
   resolved "https://registry.npmjs.org/@react-native/assets-registry/-/assets-registry-0.76.1.tgz"
@@ -6179,6 +6184,11 @@ react-native-swipe-gestures@^1.0.5:
   version "1.0.5"
   resolved "https://registry.npmjs.org/react-native-swipe-gestures/-/react-native-swipe-gestures-1.0.5.tgz"
   integrity sha512-Ns7Bn9H/Tyw278+5SQx9oAblDZ7JixyzeOczcBK8dipQk2pD7Djkcfnf1nB/8RErAmMLL9iXgW0QHqiII8AhKw==
+
+react-native-tts@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-tts/-/react-native-tts-4.1.1.tgz#a6caa23f3e955e913195d6342608cb4489dd8ed1"
+  integrity sha512-VL0TgCwkUWggbbFGIXAPKC3rM1baluAYtgOdgnaTm7UYsWf/y8n5VgmVB0J2Wa8qt1dldZ1cSsdQY9iz3evcAg==
 
 react-native@0.76.1:
   version "0.76.1"
