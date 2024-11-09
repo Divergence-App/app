@@ -2,12 +2,9 @@ import {Text, TouchableOpacity, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import fonts from '../../lib/fonts';
 import {ScrollView} from 'react-native-gesture-handler';
-import CustomHeader from '../../components/customHeader';
 import {useContext} from 'react';
 import {AppContext} from '../../components/appContext';
-import {setDyslexiaMode} from '../../lib/storage';
 import {SubjectType} from '../../types/components';
-import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {RootStackParamList} from '../../types/router';
 import {NavigationProp} from '@react-navigation/native';
 

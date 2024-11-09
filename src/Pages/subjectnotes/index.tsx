@@ -16,45 +16,59 @@ import {setDyslexiaMode, setSubjects} from '../../lib/storage';
 import {Animated} from 'react-native';
 import {Platform} from 'react-native';
 import GradientBlur from '../../components/GradientBlur';
-import {Calendar, DateData} from 'react-native-calendars';
-import {Switch} from 'react-native';
 import {NavigationProp} from '@react-navigation/native';
 import {RootStackParamList} from '../../types/router';
 import {NativeStackScreenProps} from '@react-navigation/native-stack';
 import {SubjectNotesProps} from '../../types/components';
 
-// Azure OpenAI Configuration
+// Azure OpenAI API configuration
 const AZURE_ENDPOINT = 'https://educationhackathon.openai.azure.com/';
 const AZURE_MODEL_DEPLOYMENT = 'gpt-4o';
 const AZURE_API_VERSION = '2024-08-01-preview';
 
+// Constant for header scroll animation
 const HEADER_SCROLL_DISTANCE = 1;
 
+// Props type definition using React Navigation's typing system
 type Props = NativeStackScreenProps<RootStackParamList, 'SubjectNotes'>;
 
+/**
+ * SubjectNotes screen component
+ * Displays and manages notes for a specific subject with AI feedback capabilities
+ */
 const SubjectNotes: React.FC<Props> = ({navigation, route}) => {
+  // Context and hooks
   const Context = useContext(AppContext);
   const insets = useSafeAreaInsets();
+  const {width} = useWindowDimensions();
+  
+  // Layout calculations
   const headerHeight = 10;
   const topSpacing = insets.top + headerHeight;
-  const {width} = useWindowDimensions();
-  const scrollY = new Animated.Value(0);
   const blurHeight = 100;
+  
+  // Animation and state
+  const scrollY = new Animated.Value(0);
   const [isLoading, setIsLoading] = useState(false);
-
   const [subject, setSubject] = useState(route.params.subject);
 
+  // Animation interpolation for blur effect
   const blurOpacity = scrollY.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE],
     outputRange: [0, 1],
     extrapolate: 'clamp',
   });
 
+  // Scroll handler for animation
   const handleScroll = Animated.event(
     [{nativeEvent: {contentOffset: {y: scrollY}}}],
     {useNativeDriver: false},
   );
 
+  /**
+   * Fetches AI feedback for the subject notes using Azure OpenAI API
+   * Includes error handling and loading states
+   */
   const getAIFeedback = async () => {
     if (!subject.notes || subject.notes.length === 0) {
       Alert.alert(
@@ -67,6 +81,7 @@ const SubjectNotes: React.FC<Props> = ({navigation, route}) => {
     setIsLoading(true);
 
     try {
+      // Format notes for AI processing
       const allNotes = subject.notes
         .map(
           (note: SubjectNotesProps) =>
@@ -74,6 +89,7 @@ const SubjectNotes: React.FC<Props> = ({navigation, route}) => {
         )
         .join('\n\n');
 
+      // Make API request to Azure OpenAI
       const response = await fetch(
         `${AZURE_ENDPOINT}/openai/deployments/${AZURE_MODEL_DEPLOYMENT}/chat/completions?api-version=${AZURE_API_VERSION}`,
         {
@@ -124,11 +140,12 @@ const SubjectNotes: React.FC<Props> = ({navigation, route}) => {
 
   return (
     <View className="bg-[#101010] flex-1">
-      {/* Fixed header */}
+      {/* Fixed header with blur effect */}
       <View
         style={{position: 'absolute', top: 0, left: 0, right: 0, zIndex: 1}}
         className="bg-[#101010]">
         <CustomHeader title={route.params.subject.name} showBackButton />
+        {/* Conditional blur effect for iOS */}
         {insets.top > 0 && Platform.OS !== 'android' && (
           <Animated.View
             style={{
@@ -151,7 +168,7 @@ const SubjectNotes: React.FC<Props> = ({navigation, route}) => {
         )}
       </View>
 
-      {/* Scrollable content */}
+      {/* Main scrollable content */}
       <Animated.ScrollView
         onScroll={handleScroll}
         scrollEventThrottle={16}
@@ -159,6 +176,7 @@ const SubjectNotes: React.FC<Props> = ({navigation, route}) => {
         style={{flex: 1}}
         contentInsetAdjustmentBehavior="scrollableAxes">
         <View className="w-full items-center justify-center px-4">
+          {/* Panic button for emergency teacher contact */}
           <TouchableOpacity
             onLongPress={() => {
               Alert.alert(
@@ -175,6 +193,7 @@ const SubjectNotes: React.FC<Props> = ({navigation, route}) => {
             </Text>
           </TouchableOpacity>
 
+          {/* Notes section header */}
           <View className="h-20 w-full justify-center items-center">
             <Text
               className="text-white text-3xl"
@@ -187,6 +206,7 @@ const SubjectNotes: React.FC<Props> = ({navigation, route}) => {
             </Text>
           </View>
 
+          {/* Notes list with delete functionality */}
           {subject.notes &&
             (subject.notes as SubjectNotesProps[]).map((note, index) => {
               return (
@@ -214,6 +234,7 @@ const SubjectNotes: React.FC<Props> = ({navigation, route}) => {
                         {note.content}
                       </Text>
                     </View>
+                    {/* Delete note button */}
                     <TouchableOpacity
                       onPress={() => {
                         Alert.alert(
@@ -263,6 +284,7 @@ const SubjectNotes: React.FC<Props> = ({navigation, route}) => {
               );
             })}
 
+          {/* Add note input */}
           <TextInput
             placeholder="Add a note"
             style={
@@ -304,6 +326,7 @@ const SubjectNotes: React.FC<Props> = ({navigation, route}) => {
             }}
           />
 
+          {/* AI Feedback button */}
           <TouchableOpacity
             onPress={getAIFeedback}
             disabled={isLoading}

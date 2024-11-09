@@ -9,11 +9,17 @@ import {NavigationProp} from '@react-navigation/native';
 import {RootStackParamList} from '../../types/router';
 import {SubjectType} from '../../types/components';
 
+/**
+ * Interface for storing the start and end dates of a week
+ */
 interface WeekDates {
   start: Date;
   end: Date;
 }
 
+/**
+ * Interface for calendar marked dates formatting
+ */
 interface MarkedDates {
   [date: string]: {
     startingDay?: boolean;
@@ -22,12 +28,20 @@ interface MarkedDates {
   };
 }
 
+/**
+ * TimeTablePage component displays a weekly schedule of subjects
+ * Features include:
+ * - Expandable calendar for date selection
+ * - Weekly view of subjects
+ * - Subject details and navigation
+ */
 const TimeTablePage = ({
   navigation,
 }: {
   navigation: NavigationProp<RootStackParamList>;
 }) => {
   const Context = useContext(AppContext);
+  // State management
   const [selectedWeek, setSelectedWeek] = useState<WeekDates>({
     start: new Date(),
     end: new Date(),
@@ -36,6 +50,9 @@ const TimeTablePage = ({
   const [isCalendarExpanded, setIsCalendarExpanded] = useState<boolean>(false);
   const heightAnim = useRef(new Animated.Value(0)).current;
 
+  /**
+   * Formats a date to DD/MM/YYYY string
+   */
   const formatToDD_MM_YYYY = (date: Date): string => {
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -43,6 +60,9 @@ const TimeTablePage = ({
     return `${day}/${month}/${year}`;
   };
 
+  /**
+   * Gets the start and end dates of a week given any date within that week
+   */
   const getWeekDates = (date: string | Date): WeekDates => {
     const curr = new Date(date);
     const first = curr.getDate() - curr.getDay();
@@ -51,10 +71,16 @@ const TimeTablePage = ({
     return {start, end};
   };
 
+  /**
+   * Formats date to YYYY-MM-DD string for calendar
+   */
   const formatDate = (date: Date): string => {
     return date.toISOString().split('T')[0];
   };
 
+  /**
+   * Generates an array of dates for the week
+   */
   const generateWeekDays = (startDate: Date): Date[] => {
     const days: Date[] = [];
     const currentDate = new Date(startDate);
@@ -66,6 +92,10 @@ const TimeTablePage = ({
     return days;
   };
 
+  /**
+   * Filters and sorts subjects for a specific day
+   * Handles both one-time and recurring subjects
+   */
   const getSubjectsForDay = (date: Date): SubjectType[] => {
     const dateStr = formatToDD_MM_YYYY(date);
     return Context.subjects
@@ -85,6 +115,9 @@ const TimeTablePage = ({
       .sort((a, b) => a.startsAt.localeCompare(b.startsAt));
   };
 
+  /**
+   * Handles calendar day selection and updates week view
+   */
   const onDayPress = (day: DateData): void => {
     const weekDates = getWeekDates(day.dateString);
     setSelectedWeek(weekDates);
@@ -92,6 +125,9 @@ const TimeTablePage = ({
     toggleCalendar();
   };
 
+  /**
+   * Handles calendar expansion animation
+   */
   const toggleCalendar = (): void => {
     Animated.timing(heightAnim, {
       toValue: isCalendarExpanded ? 0 : 1,
@@ -101,6 +137,9 @@ const TimeTablePage = ({
     setIsCalendarExpanded(!isCalendarExpanded);
   };
 
+  /**
+   * Generates marked dates for calendar highlighting
+   */
   const getMarkedDates = (): MarkedDates => {
     return {
       [formatDate(selectedWeek.start)]: {startingDay: true, color: '#50cebb'},
@@ -108,25 +147,32 @@ const TimeTablePage = ({
     };
   };
 
+  // Initialize week dates on component mount
   useEffect(() => {
     const weekDates = getWeekDates(new Date());
     setSelectedWeek(weekDates);
     setDaysInWeek(generateWeekDays(weekDates.start));
   }, []);
 
+  // Calendar animation interpolation
   const calendarHeight = heightAnim.interpolate({
     inputRange: [0, 1],
     outputRange: [0, 350],
   });
 
+  /**
+   * Formats day string for display (e.g., "Monday, 01/01/2024")
+   */
   const formatDayString = (day: Date): string => {
     const weekday = day.toLocaleDateString('en-US', {weekday: 'long'});
     const formattedDate = formatToDD_MM_YYYY(day);
     return `${weekday}, ${formattedDate}`;
   };
 
+  /**
+   * Converts 24-hour time format to 12-hour format with AM/PM
+   */
   const formatTimeRange = (startsAt: string, endsAt: string): string => {
-    // Convert 24-hour format to 12-hour format
     const formatTime = (time: string) => {
       const [hours, minutes] = time.split(':');
       const hour = parseInt(hours);
@@ -138,6 +184,10 @@ const TimeTablePage = ({
     return `${formatTime(startsAt)} - ${formatTime(endsAt)}`;
   };
 
+  /**
+   * Subject card component displaying subject details
+   * Navigates to subject notes on press
+   */
   const SubjectCard = ({subject}: {subject: SubjectType}) => (
     <TouchableOpacity
       onPress={() => {
@@ -180,6 +230,7 @@ const TimeTablePage = ({
 
   return (
     <SafeAreaView className="bg-[#101010] h-full w-full">
+      {/* Week selector header */}
       <TouchableOpacity
         onPress={toggleCalendar}
         className="px-4 py-3 border-b border-gray-800 flex-row justify-between items-center">
@@ -195,6 +246,7 @@ const TimeTablePage = ({
         </Text>
       </TouchableOpacity>
 
+      {/* Animated calendar view */}
       <Animated.View style={{height: calendarHeight, overflow: 'hidden'}}>
         <Calendar
           onDayPress={onDayPress}
@@ -215,6 +267,7 @@ const TimeTablePage = ({
         />
       </Animated.View>
 
+      {/* Weekly schedule view */}
       <ScrollView className="mt-4">
         {daysInWeek.map((day: Date, index: number) => {
           const daySubjects = getSubjectsForDay(day);
@@ -249,6 +302,7 @@ const TimeTablePage = ({
           );
         })}
 
+        {/* Add new subject button */}
         <View className="h-4" />
         <View className="w-full h-32 justify-center items-center">
           <TouchableOpacity

@@ -1,3 +1,4 @@
+// component types
 export interface SubjectType {
   id: string;
   name: string;

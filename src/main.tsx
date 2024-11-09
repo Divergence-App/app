@@ -1,3 +1,5 @@
+// init to app
+
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import AppRouter from './components/appRouter';
 

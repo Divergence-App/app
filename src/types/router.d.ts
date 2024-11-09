@@ -1,3 +1,4 @@
+// router params
 export type RootStackParamList = {
   Home: undefined;
   TimeTable: undefined;

@@ -3,37 +3,38 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
+// Import screen components
 import Home from '../Pages/home/index';
 import {RootStackParamList} from '../types/router';
-
-import {BlurView} from '@react-native-community/blur';
-import {View, StyleSheet, useWindowDimensions, Platform} from 'react-native';
-
-import GradientBlur from './GradientBlur';
-
-import LinearGradient from 'react-native-linear-gradient';
-import {
-  BookOpenText,
-  BookText,
-  Calendar,
-  CalendarHeart,
-  HomeIcon,
-  User,
-} from 'lucide-react-native';
 import TimeTablePage from '../Pages/timeTable';
 import UserPage from '../Pages/profile';
 import SubjectPage from '../Pages/subject';
 import SubjectNotes from '../Pages/subjectnotes';
 import RevisionFlipper from '../Pages/revisionflipper';
 
+// Import UI components and utilities
+import {useWindowDimensions, Platform} from 'react-native';
+import GradientBlur from './GradientBlur';
+import {
+  BookText,
+  Calendar,
+  HomeIcon,
+  User,
+} from 'lucide-react-native';
+
+// Create navigation objects
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+/**
+ * Stack navigator for Home tab
+ * Includes Home screen and SubjectNotes screen
+ */
 function HomeStack() {
   return (
     <Stack.Navigator
       screenOptions={{
-        header: ({route, options, navigation}) => <></>,
+        header: ({route, options, navigation}) => <></>, // Hide header
         animation: Platform.OS === 'android' ? 'slide_from_bottom' : 'default',
       }}>
       <Stack.Screen name="Home" component={Home} />
@@ -48,6 +49,10 @@ function HomeStack() {
   );
 }
 
+/**
+ * Stack navigator for TimeTable tab
+ * Includes TimeTable, Subject, and SubjectNotes screens
+ */
 function TimeTableStack() {
   return (
     <Stack.Navigator
@@ -68,6 +73,10 @@ function TimeTableStack() {
   );
 }
 
+/**
+ * Stack navigator for Profile tab
+ * Currently only includes Profile screen
+ */
 function ProfileStack() {
   return (
     <Stack.Navigator
@@ -80,6 +89,10 @@ function ProfileStack() {
   );
 }
 
+/**
+ * Stack navigator for Revision tab
+ * Currently only includes RevisionFlipper screen
+ */
 function RevisionStack() {
   return (
     <Stack.Navigator
@@ -92,14 +105,21 @@ function RevisionStack() {
   );
 }
 
+/**
+ * Main App Router component
+ * Sets up bottom tab navigation with custom styling and icons
+ * Each tab has its own stack navigator for nested navigation
+ */
 function AppRouter() {
   const {width, height} = useWindowDimensions();
+
   return (
     <>
       <NavigationContainer>
         <Tab.Navigator
           screenOptions={({route}) => ({
             headerShown: false,
+            // Custom tab bar styling
             tabBarStyle: {
               position: 'absolute',
               bottom: 0,
@@ -110,6 +130,7 @@ function AppRouter() {
               height: 80,
               borderTopWidth: 0,
             },
+            // Tab bar colors and label styling
             tabBarActiveTintColor: '#A5FFC9',
             tabBarInactiveTintColor: '#fff',
             tabBarLabelStyle: {
@@ -117,8 +138,10 @@ function AppRouter() {
               marginBottom: -20,
             },
             tabBarLabel: '',
+            // Custom background with gradient blur effect
             tabBarBackground: () => <GradientBlur width={width} height={80} />,
           })}>
+          {/* Home Tab */}
           <Tab.Screen
             name="Home"
             options={{
@@ -128,6 +151,7 @@ function AppRouter() {
             }}
             component={HomeStack}
           />
+          {/* TimeTable Tab */}
           <Tab.Screen
             name="TimeTabel"
             component={TimeTableStack}
@@ -137,6 +161,7 @@ function AppRouter() {
               ),
             }}
           />
+          {/* Revision Tab */}
           <Tab.Screen
             name="RevisionFlipper"
             component={RevisionStack}
@@ -146,6 +171,7 @@ function AppRouter() {
               ),
             }}
           />
+          {/* Profile Tab */}
           <Tab.Screen
             name="Profile"
             component={ProfileStack}
