@@ -11,6 +11,10 @@ export const getSubjects = (): SubjectType[] => {
     return storage.getArray('subjects') as SubjectType[];
 }
 
+export const clearSubjects = () => {
+    storage.removeItem('subjects');
+}
+
 export const getDyslexiaMode = (): boolean => {
     return storage.getBool('dyslexiaMode') as boolean;
 }

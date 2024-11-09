@@ -22,6 +22,8 @@ import {
 } from 'lucide-react-native';
 import TimeTablePage from '../Pages/timeTable';
 import UserPage from '../Pages/profile';
+import SubjectPage from '../Pages/subject';
+import SubjectNotes from '../Pages/subjectnotes';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -46,6 +48,10 @@ function TimeTableStack() {
         animation: Platform.OS === 'android' ? 'slide_from_bottom' : 'default',
       }}>
       <Stack.Screen name="TimeTable" component={TimeTablePage} />
+      <Stack.Screen name="Subject" component={SubjectPage} />
+      <Stack.Screen name="SubjectNotes" component={SubjectNotes} initialParams={{
+        subject: {}
+      }} />
     </Stack.Navigator>
   );
 }

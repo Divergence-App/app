@@ -1,11 +1,19 @@
 export interface SubjectType {
+    id: string;
     name: string;
-    teachers: string[];
+    teacher: string;
     colour: string;
-    time: string;
+    startsAt: string;
+    endsAt: string;
     date: string;
     repeats?: boolean;
     description?: string;
+    notes?: SubjectNotesProps[]
+}
+
+export interface SubjectNotesProps {
+    content: string;
+    date: string;
 }
 
 export interface AppContextType {
@@ -16,5 +24,5 @@ export interface AppContextType {
     setIsDyslexiaMode: (isDyslexiaMode: boolean) => void;
     
     subjects: SubjectType[];
-    setSubjects: (subjects: SubjectType[]) => void;
+    setSubjects: React.Dispatch<React.SetStateAction<SubjectType[]>>;
 }

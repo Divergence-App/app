@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren, useEffect, useState } from "react";
 import { AppContextType, SubjectType } from "../types/components";
-import { getDyslexiaMode, getSubjects } from "../lib/storage";
+import { clearSubjects, getDyslexiaMode, getSubjects } from "../lib/storage";
 
 export const AppContext = createContext<AppContextType>(null!);
 
@@ -20,6 +20,7 @@ export const AppContextProvider = ({ children }: PropsWithChildren<object>) => {
         let subjects = getSubjects();
 
         if (subjects) {
+            console.log("Subjects loaded from storage", subjects);
             setSubjects(subjects);
         }
     }, []);
