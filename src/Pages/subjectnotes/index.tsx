@@ -14,6 +14,7 @@ import { Switch } from 'react-native';
 import { NavigationProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../types/router';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { SubjectNotesProps } from '../../types/components';
 
 
 const HEADER_SCROLL_DISTANCE = 1;
@@ -28,6 +29,8 @@ const SubjectNotes: React.FC<Props> = ({ navigation, route }) => {
   const { width } = useWindowDimensions();
   const scrollY = new Animated.Value(0);
   const blurHeight = 100;
+
+  const [subject, setSubject] = useState(route.params.subject);
 
   const blurOpacity = scrollY.interpolate({
     inputRange: [0, HEADER_SCROLL_DISTANCE],
@@ -81,9 +84,109 @@ const SubjectNotes: React.FC<Props> = ({ navigation, route }) => {
       >
         <View className="w-full items-center justify-center px-4">
 
-            <Text className='text-white '>
-                {JSON.stringify(route.params.subject)}
-            </Text>
+            <TouchableOpacity onLongPress={() => {
+                Alert.alert("A message has been sent to your teachers, they'll respond shortly.")
+            }} className='bg-red-500 p-4 w-full h-20 rounded-xl items-center justify-center'>
+                <Text style={(Context.isDyslexiaMode ? fonts.dyslexicRegular : fonts.interBold)} className='text-white text-4xl'>
+                    PANIC!
+                </Text>
+            </TouchableOpacity>
+
+            <View className='h-20 w-full justify-center items-center'>
+                <Text className='text-white text-3xl' style={(Context.isDyslexiaMode ? fonts.dyslexicRegular : fonts.interRegular)}>
+                    Notes:
+                </Text>
+
+                
+            </View>
+
+            {subject.notes && (
+              (subject.notes as SubjectNotesProps[]).map((note, index) => {
+                return (
+                  <View key={index} className='w-full p-4 border-b border-green-300'>
+                    <View className='flex-row justify-between items-start'>
+                      <View className='flex-1'>
+                        <Text className='text-white text-lg' style={(Context.isDyslexiaMode ? fonts.dyslexicRegular : fonts.interRegular)}>
+                          {note.date}
+                        </Text>
+                        <Text className='text-gray-400' style={(Context.isDyslexiaMode ? fonts.dyslexicRegular : fonts.interRegular)}>
+                          {note.content}
+                        </Text>
+                      </View>
+                      <TouchableOpacity 
+                        onPress={() => {
+                          Alert.alert(
+                            "Delete Note",
+                            "Are you sure you want to delete this note?",
+                            [
+                              {
+                                text: "Cancel",
+                                style: "cancel"
+                              },
+                              {
+                                text: "Delete",
+                                style: 'destructive',
+                                onPress: () => {
+                                  // Remove the note from the subject
+                                  const updatedNotes = subject.notes?.filter((_: string, i: number) => i !== index);
+                                  setSubject({...subject, notes: updatedNotes});
+                                  
+                                  // Update the context and storage
+                                  Context.setSubjects((prev) => {
+                                    const updatedSubjects = prev.map((s) => {
+                                      if (s.id === subject.id) {
+                                        return {...subject, notes: updatedNotes};
+                                      }
+                                      return s;
+                                    });
+                                    setSubjects(updatedSubjects);
+                                    return updatedSubjects;
+                                  });
+                                }
+                              }
+                            ]
+                          );
+                        }}
+                        className='ml-4 p-2'
+                      >
+                        <Text className='text-red-500 text-base' style={(Context.isDyslexiaMode ? fonts.dyslexicRegular : fonts.interRegular)}>
+                          Delete
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                )
+              })
+            )}
+
+                <TextInput
+                    placeholder="Add a note"
+                    style={(Context.isDyslexiaMode ? fonts.dyslexicRegular : fonts.interRegular)}
+                    className='w-full p-4 border border-green-300 rounded-lg mt-4 text-white'
+                    onSubmitEditing={(e) => {
+                        const newNote = {
+                            date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString(),
+                            content: e.nativeEvent.text
+                        }
+                        if (!subject.notes) {
+                            setSubject({...subject, notes: [newNote]});
+                        }
+                        else {
+                            setSubject({...subject, notes: [...subject.notes, newNote]});
+                        }
+                        setSubjects(Context.subjects);
+                        Context.setSubjects((prev) => {
+                            const updatedSubjects = prev.map((s) => {
+                                if (s.id === subject.id) {
+                                    return {...subject};
+                                }
+                                return s;
+                            });
+                            return updatedSubjects;
+                        });
+                        e.nativeEvent.text = '';
+                    }}
+                />
         </View>
       </Animated.ScrollView>
     </View>
